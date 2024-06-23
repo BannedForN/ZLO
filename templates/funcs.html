@@ -1,0 +1,113 @@
+{% extends "index.html" %}
+{% block content %}
+<h2>Меню</h2>
+<p>Logged in as: {{ account }}</p>
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+<form method="post" onsubmit="return validateForm()">
+    <div class="form-group">
+        <label for="action">Выберите действие:</label>
+        <select class="form-control" id="action" name="action">
+            <option value="buy_estate">Приобрести недвижимость</option>
+            <option value="get_balance">Проверить баланс</option>
+            <option value="withdraw">Снять средства</option>
+            <option value="show_balance">Показать баланс аккаунта</option>
+            <option value="create_estate">Создать недвижимость</option>
+            <option value="create_ad">Создать объявление</option>
+            <option value="update_estate_status">Обновить статус недвижимости</option>
+            <option value="update_ad_status">Обновить статус объявления</option>
+        </select>
+    </div>
+    <div class="form-group" id="ad_id_group">
+        <label for="ad_id">ID объявления:</label>
+        <input type="number" class="form-control" id="ad_id" name="ad_id">
+    </div>
+    <div class="form-group" id="value_group">
+        <label for="value">Сумма для покупки:</label>
+        <input type="number" class="form-control" id="value" name="value">
+    </div>
+    <div class="form-group" id="amount_group">
+        <label for="amount">Сумма для вывода:</label>
+        <input type="number" class="form-control" id="amount" name="amount">
+    </div>
+    <div class="form-group" id="square_group">
+        <label for="square">Площадь:</label>
+        <input type="number" class="form-control" id="square" name="square">
+    </div>
+    <div class="form-group" id="rooms_group">
+        <label for="rooms">Количество комнат:</label>
+        <input type="number" class="form-control" id="rooms" name="rooms">
+    </div>
+    <div class="form-group" id="es_type_group">
+        <label for="es_type">Тип недвижимости:</label>
+        <input type="number" class="form-control" id="es_type" name="es_type">
+    </div>
+    <div class="form-group" id="estate_id_group">
+        <label for="estate_id">ID недвижимости:</label>
+        <input type="number" class="form-control" id="estate_id" name="estate_id">
+    </div>
+    <div class="form-group" id="price_group">
+        <label for="price">Цена:</label>
+        <input type="number" class="form-control" id="price" name="price">
+    </div>
+    <div class="form-group" id="ad_id_status_group">
+        <label for="ad_id_status">ID объявления:</label>
+        <input type="number" class="form-control" id="ad_id_status" name="ad_id">
+    </div>
+    <button type="submit" class="btn btn-primary">Выполнить</button>
+</form>
+<script>
+    document.getElementById('action').addEventListener('change', function() {
+        var action = this.value;
+        document.getElementById('ad_id_group').style.display = action === 'buy_estate' || action === 'update_ad_status' ? 'block' : 'none';
+        document.getElementById('value_group').style.display = action === 'buy_estate' ? 'block' : 'none';
+        document.getElementById('amount_group').style.display = action === 'withdraw' ? 'block' : 'none';
+        document.getElementById('square_group').style.display = action === 'create_estate' ? 'block' : 'none';
+        document.getElementById('rooms_group').style.display = action === 'create_estate' ? 'block' : 'none';
+        document.getElementById('es_type_group').style.display = action === 'create_estate' ? 'block' : 'none';
+        document.getElementById('estate_id_group').style.display = action === 'create_ad' || action === 'update_estate_status' ? 'block' : 'none';
+        document.getElementById('price_group').style.display = action === 'create_ad' ? 'block' : 'none';
+        document.getElementById('ad_id_status_group').style.display = action === 'update_ad_status' ? 'block' : 'none';
+    });
+
+    function validateForm() {
+        var action = document.getElementById('action').value;
+        var ad_id = document.getElementById('ad_id').value;
+        var value = document.getElementById('value').value;
+        var amount = document.getElementById('amount').value;
+        var square = document.getElementById('square').value;
+        var rooms = document.getElementById('rooms').value;
+        var es_type = document.getElementById('es_type').value;
+        var estate_id = document.getElementById('estate_id').value;
+        var price = document.getElementById('price').value;
+        var ad_id_status = document.getElementById('ad_id_status').value;
+
+        if (action === 'buy_estate' && (ad_id === '' || value === '')) {
+            alert('Пожалуйста, заполните все поля для покупки недвижимости.');
+            return false;
+        }
+        if (action === 'withdraw' && amount === '') {
+            alert('Пожалуйста, укажите сумму для вывода.');
+            return false;
+        }
+        if (action === 'create_estate' && (square === '' || rooms === '' || es_type === '')) {
+            alert('Пожалуйста, заполните все поля для создания недвижимости.');
+            return false;
+        }
+        if (action === 'create_ad' && (estate_id === '' || price === '')) {
+            alert('Пожалуйста, заполните все поля для создания объявления.');
+            return false;
+        }
+        if (action === 'update_estate_status' && estate_id === '') {
+            alert('Пожалуйста, укажите ID недвижимости для обновления статуса.');
+            return false;
+        }
+        if (action === 'update_ad_status' && (estate_id === '' || ad_id_status === '')) {
+            alert('Пожалуйста, заполните все поля для обновления статуса объявления.');
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}
